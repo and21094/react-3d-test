@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import * as THREE from 'three'
+import OrbitControls from 'three-orbitcontrols'
 
 import './Three.css';
 /**
@@ -12,8 +13,15 @@ class three extends Component {
 
     this.start = this.start.bind(this);
     this.animate = this.animate.bind(this);
-  }
+    this.state = {
+      isMouseDown: false
+    }
 
+    this.stop = this.stop.bind(this);
+    this.restart = this.restart.bind(this);
+    
+  }
+  
   componentDidMount() {
 
     const width = this.stage.clientWidth;
@@ -56,13 +64,14 @@ class three extends Component {
     renderer.setClearColor('#fff');
     renderer.setSize(width, height);
 
+    
     this.scene = scene;
     this.camera = camera;
     this.renderer = renderer;
-    this.material = material;
     this.cube = cube;
-
+    
     this.stage.appendChild(this.renderer.domElement);
+    new OrbitControls( camera, renderer.domElement );
     this.start();
   }
 
@@ -72,9 +81,20 @@ class three extends Component {
     }
   }
 
+  stop() {
+    this.setState({ isMouseDown: true});
+  }
+
+  restart() {
+    this.setState({ isMouseDown: false});
+  }
+
   animate() {
-    this.cube.rotation.x += 0.01;
-    this.cube.rotation.y += 0.01;
+    // console.log(this.state.isMouseDown);
+    if (!this.state.isMouseDown) {
+      this.cube.rotation.x += 0.005;
+      this.cube.rotation.y += 0.005;
+    }
 
     this.renderScene();
     this.frameId = window.requestAnimationFrame(this.animate);
@@ -84,13 +104,17 @@ class three extends Component {
     this.renderer.render(this.scene, this.camera);
   }
 
+
   render() {
     return (
       <div>
         <h2>
           Three.js - Rubik Cube
         </h2>
-        <div style={{ width: '100%', height: '500px' }} ref={(stage) => { this.stage = stage }}></div>
+        <p>
+          use your mouse to rotate the cube.
+        </p>
+        <div onMouseDown={this.stop} onMouseUp={this.restart} style={{ width: '100%', height: '500px' }} ref={(stage) => { this.stage = stage }}></div>
       </div>
     )
   }

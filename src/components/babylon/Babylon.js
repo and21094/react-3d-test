@@ -79,7 +79,7 @@ class Babylon extends Component {
       <div>
         <h2>Babylon.js - Babylon Logo</h2>
         <p>
-          use your mouse to move the cube.
+          use your mouse to rotate the cube.
         </p>
         <canvas className="scene" ref={ el => this.stage = el}></canvas>              
       </div>
