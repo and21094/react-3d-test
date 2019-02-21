@@ -18,11 +18,13 @@ class three extends Component {
     }
 
     this.stop = this.stop.bind(this);
-    this.restart = this.restart.bind(this);
-    
   }
   
   componentDidMount() {
+
+    window.addEventListener('mouseup',()=>{
+      this.setState({ isMouseDown: false});
+    });
 
     const width = this.stage.clientWidth;
     const height = this.stage.clientHeight;
@@ -85,12 +87,7 @@ class three extends Component {
     this.setState({ isMouseDown: true});
   }
 
-  restart() {
-    this.setState({ isMouseDown: false});
-  }
-
   animate() {
-    // console.log(this.state.isMouseDown);
     if (!this.state.isMouseDown) {
       this.cube.rotation.x += 0.005;
       this.cube.rotation.y += 0.005;
@@ -114,7 +111,7 @@ class three extends Component {
         <p>
           use your mouse to rotate the cube.
         </p>
-        <div onMouseDown={this.stop} onMouseUp={this.restart} style={{ width: '100%', height: '500px' }} ref={(stage) => { this.stage = stage }}></div>
+        <div onMouseDown={this.stop} style={{ width: '100%', height: '500px' }} ref={(stage) => { this.stage = stage }}></div>
       </div>
     )
   }
